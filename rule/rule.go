@@ -109,6 +109,11 @@ func (p *Proxy) NextDialer(dstAddr string) proxy.Dialer {
 	return p.nextProxy(dstAddr).NextDialer(dstAddr)
 }
 
+// RecordFailure records failure happened while using this proxy.
+func (p *Proxy) RecordFailure() {
+	p.proxy.RecordFailure()
+}
+
 // AddDomainIP used to update ipMap rules according to domainMap rule
 func (p *Proxy) AddDomainIP(domain, ip string) error {
 	if ip != "" {

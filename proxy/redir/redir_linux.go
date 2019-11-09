@@ -115,10 +115,10 @@ func (s *RedirProxy) Serve(c net.Conn) {
 
 	_, _, err = conn.Relay(c, rc)
 	if err != nil {
+		log.F("[redir] relay error: %v", err)
 		if err, ok := err.(net.Error); ok && err.Timeout() {
 			return // ignore i/o timeout
 		}
-		log.F("[redir] relay error: %v", err)
 	}
 }
 

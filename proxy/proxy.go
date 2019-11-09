@@ -12,4 +12,7 @@ type Proxy interface {
 
 	// Get the dialer by dstAddr
 	NextDialer(dstAddr string) Dialer
+
+	// RecordsFailure records fail happened while using this proxy.
+	RecordFailure()
 }

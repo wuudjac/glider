@@ -43,16 +43,18 @@ func Relay(left, right net.Conn) (int64, int64, error) {
 	}
 	ch := make(chan res)
 
+	deadline := time.Now().Add(20 * time.Second)
+
 	go func() {
 		n, err := io.Copy(right, left)
-		right.SetDeadline(time.Now()) // wake up the other goroutine blocking on right
-		left.SetDeadline(time.Now())  // wake up the other goroutine blocking on left
+		right.SetDeadline(deadline) // wake up the other goroutine blocking on right
+		left.SetDeadline(deadline)  // wake up the other goroutine blocking on left
 		ch <- res{n, err}
 	}()
 
 	n, err := io.Copy(left, right)
-	right.SetDeadline(time.Now()) // wake up the other goroutine blocking on right
-	left.SetDeadline(time.Now())  // wake up the other goroutine blocking on left
+	right.SetDeadline(deadline) // wake up the other goroutine blocking on right
+	left.SetDeadline(deadline)  // wake up the other goroutine blocking on left
 	rs := <-ch
 
 	if err == nil {

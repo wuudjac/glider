@@ -121,6 +121,13 @@ func (p *Proxy) NextDialer(dstAddr string) proxy.Dialer {
 	return p.nextForwarder(dstAddr)
 }
 
+// RecordFailure records failure happened while using this proxy.
+func (p *Proxy) RecordFailure() {
+	forwarder := p.available[p.index]
+	forwarder.IncFailures()
+	log.F("[strategy] proxy recorded failure on forwarder: %s", forwarder.Addr())
+}
+
 // Priority returns the active priority of dialer.
 func (p *Proxy) Priority() uint32 { return atomic.LoadUint32(&p.priority) }
 
